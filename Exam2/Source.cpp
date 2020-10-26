@@ -396,46 +396,40 @@ Case* SortByPriority(Case*& New_ListCases, int& IndikZapolnenia) {
 Case* SortByDate(Case*& New_ListCases, int& IndikZapolnenia) {
 	for (i = 0; i < IndikZapolnenia; i++) {
 		for (j = IndikZapolnenia - 1; j > i; j--) {
-			if (New_ListCases[j - 1].y.year > New_ListCases[j].y.year) {
-				Case temp = New_ListCases[j - 1];
-				New_ListCases[j - 1] = New_ListCases[j];
-				New_ListCases[j] = temp;
+			if (New_ListCases[j - 1].y.year > New_ListCases[j].y.year) { ChangeCasePlace(New_ListCases, j);	}
+		}
+	}
+	for (i = 0; i < IndikZapolnenia; i++) {
+		for (j = IndikZapolnenia - 1; j > i; j--) {
+			if (New_ListCases[j-1].y.year == New_ListCases[j].y.year) {
+				if (New_ListCases[j - 1].y.month > New_ListCases[j].y.month) {	ChangeCasePlace(New_ListCases, j);	}
 			}
 		}
 	}
 	for (i = 0; i < IndikZapolnenia; i++) {
-		if (New_ListCases[i].y.year == New_ListCases[i + 1].y.year &&
-			New_ListCases[i].y.month == New_ListCases[i + 1].y.month) {
-			if (New_ListCases[i].y.day > New_ListCases[i + 1].y.day) {
-				ChangeCasePlace(New_ListCases, i);
+		for (j = IndikZapolnenia - 1; j > i; j--) {
+			if (New_ListCases[j-1].y.year == New_ListCases[j].y.year &&
+				New_ListCases[j-1].y.month == New_ListCases[j].y.month) {
+				if (New_ListCases[j-1].y.day > New_ListCases[j].y.day) {	ChangeCasePlace(New_ListCases, j);	}
 			}
 		}
 	}
 	for (i = 0; i < IndikZapolnenia; i++) {
-		if (New_ListCases[i].y.year == New_ListCases[i + 1].y.year &&
-			New_ListCases[i].y.month == New_ListCases[i + 1].y.month) {
-			if (New_ListCases[i].y.day > New_ListCases[i + 1].y.day) {
-				ChangeCasePlace(New_ListCases, i);
+		for (j = IndikZapolnenia - 1; j > i; j--) {
+			if (New_ListCases[j -1].y.year == New_ListCases[j].y.year &&
+				New_ListCases[j - 1].y.month == New_ListCases[j].y.month &&
+				New_ListCases[j-1].y.day == New_ListCases[j].y.day) {
+				if (New_ListCases[j-1].y.hour > New_ListCases[j].y.hour) {	ChangeCasePlace(New_ListCases, j);	}
 			}
 		}
 	}
 	for (i = 0; i < IndikZapolnenia; i++) {
-		if (New_ListCases[i].y.year == New_ListCases[i + 1].y.year &&
-			New_ListCases[i].y.day == New_ListCases[i + 1].y.day &&
-			New_ListCases[i].y.month == New_ListCases[i + 1].y.month) {
-			if (New_ListCases[i].y.hour > New_ListCases[i + 1].y.hour) {
-				ChangeCasePlace(New_ListCases, i);
-			}
-		}
-	}
-	for (i = 0; i < IndikZapolnenia; i++) {
-		if (New_ListCases[i].y.year == New_ListCases[i + 1].y.year &&
-			New_ListCases[i].y.hour == New_ListCases[i + 1].y.hour &&
-			New_ListCases[i].y.day == New_ListCases[i + 1].y.day &&
-			New_ListCases[i].y.month == New_ListCases[i + 1].y.month) {
-			if (New_ListCases[i].y.minute > New_ListCases[i + 1].y.minute) {
-				ChangeCasePlace(New_ListCases, i);
-
+		for (j = IndikZapolnenia - 1; j > i; j--) {
+			if (New_ListCases[j - 1].y.year == New_ListCases[j].y.year &&
+				New_ListCases[j - 1].y.month == New_ListCases[j].y.month &&
+				New_ListCases[j - 1].y.day == New_ListCases[j].y.day &&
+				New_ListCases[j - 1].y.hour == New_ListCases[j].y.hour) {
+				if (New_ListCases[j - 1].y.minute > New_ListCases[j].y.minute) { ChangeCasePlace(New_ListCases, i);	}
 			}
 		}
 	}
@@ -455,10 +449,10 @@ Case* SortAll(Case*& New_ListCases, int IndikZapolnenia, int& IndikGo) {
 	} while (IndikVvoda2 > 0 && IndikVvoda2 < 3);
 	return New_ListCases;
 };
-Case* ChangeCasePlace(Case*& New_ListCases, int i) {
-	Case temp = New_ListCases[i];
-	New_ListCases[i] = New_ListCases[i + 1];
-	New_ListCases[i + 1] = temp;
+Case* ChangeCasePlace(Case*& New_ListCases, int j) {
+	Case temp = New_ListCases[j - 1];
+	New_ListCases[j - 1] = New_ListCases[j];
+	New_ListCases[j] = temp;
 	return New_ListCases;
 };
 Case* CopyAfterShow(Case*& ListCases, Case*& New_ListCases, int sizeArr, int IndikZapolnenia, int i, int A, int B, int C) {
