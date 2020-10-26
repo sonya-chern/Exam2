@@ -18,7 +18,7 @@ inline void EnterDigit(int &a, char digit[], int i);
 Case AddCase(Case& x);
 Case* CopyFillCase(Case*& ListCases, int IndikZapolnenia, Case& x);
 Case* DeleteCase(Case*& ListCases, int& sizeArr, int IndikVvoda, int& IndikZapolnenia);
-Case* ModifyByName(Case*& ListCases, int& sizeArr, string FindCase, int& IndikGo);
+Case* Modify(Case*& ListCases, int& sizeArr, int IndikVvoda);
 void SerchCaseByName(Case*& ListCases, int& sizeArr, string FindCase);
 void SerchCaseByPriority(Case*& ListCases, int& sizeArr, int IndikVvoda);
 void SerchCaseByDescription(Case*& ListCases, int& sizeArr, string FindCase);
@@ -65,37 +65,36 @@ int main() {
 		case 2: {
 			do {
 				system("cls");
-				cout << "Какое дело удалить? Выберете номер." << endl;
+				cout << "Какое дело удалить? Выберите номер." << endl;
 				cout << "Для возврата в предыдущее меню нажмите 0" << endl;
 				for (i = 0; i < sizeArr; i++) {
-					cout << i + 1 << " " << ListCases[i].name << endl;
-					cout << ListCases[i].description << endl << endl;
+					cout << i + 1 << " " << "Название: " << ListCases[i].name << endl;
+					cout << "  " << "Описание: " << ListCases[i].description << endl << endl;
 				}
 				EnterDigit(IndikVvoda, digit, i);
 				if (IndikVvoda == 0 || IndikVvoda <1 || IndikVvoda>sizeArr) { break; }
 				ListCases = DeleteCase(ListCases, sizeArr, IndikVvoda, IndikZapolnenia);
-				system("cls");
-			} while (IndikVvoda > 0);
+			} while (IndikVvoda != 0);
 			system("cls");
 			break;
 		}
 		case 3: {
 			do {
 				system("cls");
-				cout << "Какое дело отредактировать? Введите название" << endl;
+				cout << "Какое дело редактировать? Выберите номер." << endl;
 				cout << "Для возврата в предыдущее меню нажмите 0" << endl;
-				getline(cin, FindCase);
-				char digit2[30];
-				for (i = 0; i < (int)FindCase.length(); i++) { digit2[i] = FindCase[i]; }
-				i = IsItDigit(&IndikVvoda, digit2);
-				if (i == 1) { break; }
-				ModifyByName(ListCases, sizeArr, FindCase, IndikGo);
-				if (IndikGo == 1) break;
-			} while (i != 1);
+				for (i = 0; i < sizeArr; i++) {
+					cout << i + 1 << " " << "Название: " << ListCases[i].name << endl;
+					cout << "  " << "Описание: " << ListCases[i].description << endl << endl;
+				}
+				EnterDigit(IndikVvoda, digit, i);
+				if (IndikVvoda == 0 || IndikVvoda <1 || IndikVvoda>sizeArr) { break; }
+				ListCases = Modify(ListCases, sizeArr, IndikVvoda);
+			} while (IndikVvoda != 0);
 			system("cls");
 			break;
 		}
-		case 4: {
+		case 4: { system("cls");
 			do {
 				cout << "Поиск дела по названию - нажмите 1, по приоритету - 2, поиск по описанию - 3, по дате и времени - 4" << endl;
 				cout << "Для возврата в предыдущее меню нажмите 0" << endl;
@@ -104,8 +103,7 @@ int main() {
 				if (IndikVvoda == 0 || IndikVvoda < 1 || IndikVvoda>4) { break; }
 				switch (IndikVvoda) {
 				case 1: {
-					cout << "Введите название: " << endl;
-					cout << "Для возврата в предыдущее меню нажмите 0" << endl;
+					cout << "Введите название дела " << endl << "Для возврата в предыдущее меню нажмите 0" << endl;
 					getline(cin, FindCase);
 					char digit2[30];
 					for (i = 0; i < (int)FindCase.length(); i++) { digit2[i] = FindCase[i]; }
@@ -114,7 +112,7 @@ int main() {
 					SerchCaseByName(ListCases, sizeArr, FindCase);
 					break;
 				}
-				case 2: {cout << "Введите номер приоритета ( 1- высокий, 2 - средний, 3 - низкий): " << endl;
+				case 2: {cout << "Введите номер приоритета ( 1- высокий, 2 - средний, 3 - низкий) " << endl;
 					cout << "Для возврата в предыдущее меню нажмите 0" << endl;
 					EnterDigit(IndikVvoda, digit, i);
 					if (IndikVvoda > 0 && IndikVvoda < 4)
@@ -122,8 +120,7 @@ int main() {
 					break;
 				}
 				case 3: {
-					cout << "Введите описание: " << endl;
-					cout << "Для возврата в предыдущее меню нажмите 0" << endl;
+					cout << "Введите описание дела" << endl << "Для возврата в предыдущее меню нажмите 0" << endl;
 					getline(cin, FindCase);
 					char digit2[30];
 					for (i = 0; i < (int)FindCase.length(); i++) { digit2[i] = FindCase[i]; }
@@ -160,6 +157,7 @@ int main() {
 			time (&timer);
 			ptm = gmtime_s (&timer);
 			cout << "Самарское время: " << (ptm->tm_hour + 5) % 24 << ":"<< ptm->tm_min << endl;*/
+			system("cls");
 			cout << "Введите сегодняшнее число:" << endl;
 			EnterDigit(A, digit, i);
 			if (A == 0) { cout << "Нет такой даты"; break; }
@@ -167,22 +165,22 @@ int main() {
 			EnterDigit(B, digit, i);
 			cout << "Введите текущий год:" << endl;
 			EnterDigit(C, digit, i);
+			system("cls");
 			do {
 				cout << "Сегодня: " << A << "." << B << "." << C << endl;
 				cout << "Отобразить дела на сегодня - нажмите 1, на неделю - 2, отобразить дела на месяц  - 3." << endl;
 				cout << "Для возврата в предыдущее меню нажмите 0" << endl;
 				EnterDigit(IndikVvoda, digit, i);
 				system("cls");
-				IndikZapolnenia2 = 0;
-				Case* New_ListCases = new Case[IndikZapolnenia2];
 				if (IndikVvoda < 1 || IndikVvoda>3)  break;
-				else if (IndikVvoda == 1) {					
+				else if (IndikVvoda == 1) {	
+					IndikZapolnenia2 = 0;
 					for (j = 0; j < sizeArr; j++) {
 						if (A == ListCases[j].y.day && B == ListCases[j].y.month && C == ListCases[j].y.year) { ++IndikZapolnenia2; }
 					}
 					if (IndikZapolnenia2 == 0) { cout << "Дел на сегодня нет" << endl; }
 					else {
-						New_ListCases [IndikZapolnenia2];
+						Case* New_ListCases = new Case [IndikZapolnenia2];
 						i = 1;
 						CopyAfterShow(ListCases, New_ListCases, sizeArr, IndikZapolnenia2, i, A, B, C);
 						ShowOnlySort(New_ListCases, IndikZapolnenia2);
@@ -192,9 +190,11 @@ int main() {
 							system("cls");
 							ShowOnlySort(New_ListCases, IndikZapolnenia2);
 						}
+						delete[] New_ListCases;
 					}
 				}
 				else if (IndikVvoda == 2) {
+					IndikZapolnenia2 = 0;
 					int n = 0, m = A;
 					do {
 						for (j = 0; j < sizeArr; j++) {
@@ -204,31 +204,33 @@ int main() {
 					} while (n < 7);
 					if (IndikZapolnenia2 == 0) { cout << "Дел нет" << endl; }
 					else {
-						New_ListCases[IndikZapolnenia2];
+						Case* New_ListCases = new Case[IndikZapolnenia2];
 						CopyAfterShow(ListCases, New_ListCases, sizeArr, IndikZapolnenia2, n, A, B, C);
 						ShowOnlySort(New_ListCases, IndikZapolnenia2);
 						SortAll(New_ListCases, IndikZapolnenia2, IndikGo);
 						if (IndikGo == 1) continue;
+						delete[] New_ListCases;
 					}
 				}
 				else if (IndikVvoda == 3) {
+					IndikZapolnenia2 = 0;
 					int n = 0;
 						for (j = 0; j < sizeArr; j++) {
 							if (A <= ListCases[j].y.day && B == ListCases[j].y.month && C == ListCases[j].y.year) { ++IndikZapolnenia2; }
 						}
 					if (IndikZapolnenia2 == 0) { cout << "Дел на этот месяц нет" << endl;}
 					else {
-						New_ListCases [IndikZapolnenia2];
+						Case* New_ListCases = new Case[IndikZapolnenia2];
 						i = 0;
 						CopyAfterShow(ListCases, New_ListCases, sizeArr, IndikZapolnenia2, i, A, B, C);
 						ShowOnlySort(New_ListCases, IndikZapolnenia2);
 						SortAll(New_ListCases, IndikZapolnenia2, IndikGo);
 						if (IndikGo == 1) continue;
+						delete[] New_ListCases;
 					}
 				}
-				delete[] New_ListCases;
+				//delete[] New_ListCases;
 			} while (IndikVvoda != 0);
-			
 			system("cls");
 			break;
 		}
@@ -263,7 +265,6 @@ Case AddCase(Case& x) {
 		cout << "Неправильно введен приоритет. Пожалуйста, введите цифру для обозначения приоритета: " << endl; 
 		EnterDigit(x.priority, digit, i);
 	}
-
 	cout << "Описание: "; getline(cin, x.description);
 	cout << "День исполнения: "; 
 	EnterDigit(x.y.day, digit, i);
@@ -339,29 +340,12 @@ Case* DeleteCase(Case*& ListCases, int &sizeArr, int IndikVvoda, int &IndikZapol
 				break;
 			}
 		}
-		delete[] ListCases;
-		ListCases = New_ListCases;
+		delete[] ListCases; ListCases = New_ListCases;
 	}
 		return ListCases;	
 };
-Case* ModifyByName(Case*& ListCases, int& sizeArr, string FindCase, int &IndikGo) {
-	IndikVvoda = 0, IndikGo = 0;
-	int IndikSerch=0;
-	for (i = 0; i < sizeArr; i++) {
-		if ((ListCases[i].name.find(FindCase)) != -1) {
-			cout << ++IndikSerch << " ";
-			ShowCase(ListCases[i]);
-			cout << endl;
-		}
-	}
-	do {
-		cout << "Введите номер дела, которое хотите отредактировать: ";
-		cout << "Для возврата в предыдущее меню нажмите 0" << endl;
-		EnterDigit(IndikVvoda, digit, i);
-		if (IndikVvoda == 0) { IndikGo = 1; }
-		else if (IndikVvoda <1 || IndikVvoda>IndikSerch) { cout << "Такого дела нет"<< endl; }
-		else { ListCases[IndikVvoda - 1] = AddCase(x); }
-	} while (IndikVvoda != 0);
+Case* Modify(Case*& ListCases, int& sizeArr, int IndikVvoda) {
+	ListCases[IndikVvoda - 1] = AddCase(x); 
 	return ListCases;
 };
 void SerchCaseByName(Case*& ListCases, int& sizeArr, string FindCase) {
@@ -373,6 +357,7 @@ void SerchCaseByName(Case*& ListCases, int& sizeArr, string FindCase) {
 			cout << endl;
 		}
 	}
+	if (!IndikSerch) cout << "Такого дела нет" << endl;
 };
 void SerchCaseByPriority(Case*& ListCases, int& sizeArr, int IndikVvoda) {
 	int IndikSerch = 0;
@@ -383,6 +368,7 @@ void SerchCaseByPriority(Case*& ListCases, int& sizeArr, int IndikVvoda) {
 			cout << endl;
 		}
 	}
+	if (!IndikSerch) cout << "Такого дела нет" << endl;
 };
 void SerchCaseByDescription(Case*& ListCases, int& sizeArr, string FindCase) {
 	int IndikSerch = 0;
@@ -393,6 +379,7 @@ void SerchCaseByDescription(Case*& ListCases, int& sizeArr, string FindCase) {
 			cout << endl;
 		}
 	}
+	if (!IndikSerch) cout << "Такого дела нет" << endl;
 };
 Case* SortByPriority(Case*& New_ListCases, int& IndikZapolnenia) {
 	for (i = 0; i < IndikZapolnenia; i++) {
@@ -457,8 +444,9 @@ Case* SortByDate(Case*& New_ListCases, int& IndikZapolnenia) {
 Case* SortAll(Case*& New_ListCases, int IndikZapolnenia, int& IndikGo) {
 	do {
 		cout << "Отобразить все дела по дате и времени - 1, отобразить дела по приоритету  - 2." << endl;
-		cout << "Для возврата в предыдущее меню нажмите 0 или любое другое число" << endl;
+		cout << "Для возврата в предыдущее меню нажмите 0" << endl;
 		EnterDigit(IndikVvoda2, digit, i);
+		system("cls");
 		IndikGo = 0;
 		if (IndikVvoda2 < 1 || IndikVvoda2>2) {IndikGo = 1; break;}
 		else if (IndikVvoda2 == 2) {SortByPriority (New_ListCases, IndikZapolnenia); system("cls"); ShowOnlySort(New_ListCases, IndikZapolnenia); }
