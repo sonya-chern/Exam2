@@ -13,8 +13,8 @@ int i = 0, j, A, B, C, D, F, IndikVvoda, IndikVvoda2, IndikGo, IndikZapolnenia =
 struct Date { int day; int month; int year; int hour; int minute; };
 struct Case { string name; int priority; string description; Date y; };
 Case x = { "0" , 0 ,"0" , {0,0,0,0,0} };
-int IsItDigit(int* a, char digit[20]);
-void EnterDigit(int &a, char digit[], int i);
+inline int IsItDigit(int* a, char digit[20]);
+inline void EnterDigit(int &a, char digit[], int i);
 Case AddCase(Case& x);
 Case* CopyFillCase(Case*& ListCases, int IndikZapolnenia, Case& x);
 Case* DeleteCase(Case*& ListCases, int& sizeArr, int IndikVvoda, int& IndikZapolnenia);
@@ -239,7 +239,7 @@ int main() {
 	return 0;
 }
 /// ///////////////////////////////////////////////////////////
-int IsItDigit(int* a, char digit[20]) {
+inline int IsItDigit(int* a, char digit[20]) {
 	if (isdigit(digit[0])) {
 		*a = atoi(digit);
 		for (i = 0; i < 20; i++) digit[i] = 0;
@@ -247,7 +247,7 @@ int IsItDigit(int* a, char digit[20]) {
 	}
 	else return 0;
 };
-void EnterDigit(int &a, char digit[], int i) {
+inline void EnterDigit(int &a, char digit[], int i) {
 	do {
 		cin >> digit;
 		cin.ignore(32767, '\n');
@@ -257,7 +257,6 @@ void EnterDigit(int &a, char digit[], int i) {
 };
 Case AddCase(Case& x) {
 	cout << "Название: "; getline(cin, x.name);
-
 	cout << "Приоритет( 1- высокий, 2 - средний, 3 - низкий): ";	
 	EnterDigit(x.priority, digit, i);
 	if (x.priority < 1 || x.priority>3) { 
